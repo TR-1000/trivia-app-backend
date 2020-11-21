@@ -1,4 +1,4 @@
-package model;
+package models;
 
 public enum Role {
 	ADMIN,

@@ -1,7 +1,3 @@
-import model.Admin;
-import model.Player;
-import model.User;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -17,6 +13,10 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import models.Admin;
+import models.Player;
+import models.User;
+
 public class App {
 	
 	@SuppressWarnings("unchecked")
@@ -26,12 +26,14 @@ public class App {
 //		for(String fileNames : file.list()) System.out.println(fileNames);
 		
 	
-//		// CREATE player and admin
-//		Player player = new Player("t-1000", "password");
-//		System.out.println(player.toString());
-//		
-//		User user = new Admin("t-2000", "password");
-//		System.out.println(user.toString());
+		// CREATE player and admin
+		Player player = new Player("t-1000", "password");
+		System.out.println(player.toString());
+		
+		User user = new Admin("t-2000", "password");
+		System.out.println(user.toString());
+		
+		
 		// New ArrayList
 		List<String> answerList = new ArrayList<>();
 		
