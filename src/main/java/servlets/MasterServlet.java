@@ -5,6 +5,7 @@ import com.sun.xml.internal.bind.v2.TODO;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -24,6 +25,7 @@ import dao.UserDAOImpl;
 
 import models.Admin;
 import models.Player;
+import models.Role;
 import models.Round;
 import models.User;
 
@@ -57,7 +59,50 @@ public class MasterServlet extends HttpServlet {
 			switch (uri_portions[0]) {
 			
 			
+			// ================================================
+			// ///////////////// LOGIN LOGOUT /////////////////
+			// ================================================
 			
+			case "player_login":
+
+				loginController.player_login(req, res);
+
+				break;
+
+			case "admin_login":
+
+				loginController.admin_login(req, res);
+
+				break;
+
+			case "logout":
+
+				if (session != null && ((Boolean) session.getAttribute("loggedin"))) {
+
+					loginController.logout(req, res);
+
+				} else {
+
+					res.getWriter().println("Can't log out if you were never logged in");
+				}
+
+				break;
+				
+			case "session":
+				
+				if (session != null && ((Boolean) session.getAttribute("loggedin"))) {
+					
+					String username = (String) session.getAttribute("username");
+
+					res.getWriter().println("Logged in as " + username);
+
+				} else {
+
+					res.getWriter().println("You are not logged in");
+				}
+				
+				break;
+				
 			// ============================================
 			// ///////////////// PLAYERS /////////////////
 			// ============================================
@@ -116,7 +161,7 @@ public class MasterServlet extends HttpServlet {
 								&& (
 								session.getAttribute("username").equals("username")
 								||
-								session.getAttribute("role").equals("admin")
+								session.getAttribute("role").equals(Role.ADMIN)
 								)
 							)
 						{
@@ -131,7 +176,7 @@ public class MasterServlet extends HttpServlet {
 						}
 
 					} else {
-
+						
 						if ( session != null ) {
 							if (session.getAttribute("role").equals("admin") || session.getAttribute("role").equals("admin")) {
 								List<User> all = userDAO.findAllPlayers();
@@ -143,6 +188,9 @@ public class MasterServlet extends HttpServlet {
 								res.getWriter().println(om.writeValueAsString("Access Denied!"));
 							}
 
+						} else {
+							res.setStatus(401);
+							res.getWriter().println(om.writeValueAsString("Access Denied!"));
 						}
 						
 					}
@@ -152,13 +200,23 @@ public class MasterServlet extends HttpServlet {
 				break;
 				
 			case "player_update":
+				System.out.println(session.getAttribute("role"));
+				System.out.println(session.getAttribute("username"));
+				
+				/* update player account */
 				
 				try {
+					
 					String username = uri_portions[1];
 					
 					if (session != null && ((Boolean) session.getAttribute("loggedin"))
-							&& (session.getAttribute("username").equals(username)
-							|| session.getAttribute("role").equals("admin"))) {
+							&& (
+							session.getAttribute("username").equals(username)
+							|| 
+							session.getAttribute("role").equals(Role.ADMIN)
+							)
+						) 
+					{
 						
 						Player foundUser = userDAO.findPlayerByName(username);
 
@@ -210,7 +268,9 @@ public class MasterServlet extends HttpServlet {
 					}
 					
 				} catch (Exception e) {
-					e.printStackTrace();
+					res.getWriter().println("Mistakes Were Made");
+					res.getWriter().println(e);
+					
 				}
 				
 				break;
@@ -264,6 +324,74 @@ public class MasterServlet extends HttpServlet {
 				
 				break;
 				
+			case "admin_update":
+				
+				/* update player account */
+				
+				try {
+					String username = uri_portions[1];
+					
+					if (session != null && ((Boolean) session.getAttribute("loggedin"))
+							&& (session.getAttribute("username").equals(username)
+							&& session.getAttribute("role").equals("admin"))) {
+						
+						Admin foundUser = userDAO.findAdminByName(username);
+
+						BufferedReader reader = req.getReader();
+
+						StringBuilder string = new StringBuilder();
+
+						String line = reader.readLine();
+
+						while (line != null) {
+							string.append(line);
+							line = reader.readLine();
+						}
+
+						String body = new String(string);
+
+						System.out.println(body);
+
+						User user = om.readValue(body, Admin.class);
+
+						System.out.println(user);
+
+						if(user != null) {
+							foundUser.setUsername(user.getUsername());
+							foundUser.setPassword(user.getPassword());
+							//foundUser.setId(id);
+
+							System.out.println("before " + foundUser);
+
+							userDAO.updateAdmin(foundUser);
+
+							System.out.println("after " + foundUser);
+
+							foundUser = userDAO.findAdminByName(username);
+
+							System.out.println(body);
+
+						}
+						res.setStatus(200);
+						res.getWriter().println("Update Successful!");
+						String json = om.writeValueAsString(foundUser);
+						res.getWriter().println(json);
+
+					} else {
+
+						res.setStatus(401);
+						res.getWriter().println("Access Denied!");
+
+					}
+					
+				} catch (Exception e) {
+					res.getWriter().println("Mistakes Were Made");
+					res.getWriter().println(e);
+					
+				}
+				
+				break;
+				
 				
 			// =================================================
 			// ///////////////// ROUNDS PLAYED ////////////////
@@ -283,13 +411,10 @@ public class MasterServlet extends HttpServlet {
 						
 						try {
 							List<Round> rounds = roundDAO.getRoundsByPlayerID(id);
-							
 							System.out.println(rounds);
-							
 							res.setStatus(200);
-
+							res.getWriter().println("Rounds played by " + username);
 							String json = om.writeValueAsString(rounds);
-							
 							res.getWriter().println(json);
 							
 						} catch (Exception e) {
@@ -329,6 +454,9 @@ public class MasterServlet extends HttpServlet {
 				
 
 			default:
+				String json = om.writeValueAsString("Page not found");
+				res.setStatus(404);
+				res.getWriter().println(json);
 				break;
 			}
 			

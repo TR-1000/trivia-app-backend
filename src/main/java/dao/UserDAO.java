@@ -13,6 +13,7 @@ public interface UserDAO {
 	public List<User> findAllPlayers();
 	public List<User> findAllAdmin();
 	public boolean updatePlayer(Player pla);
+	public boolean updateAdmin(Admin admin);
 	
 
 	
