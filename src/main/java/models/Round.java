@@ -9,6 +9,11 @@ public class Round {
 	long score;
 	String date;
 	
+	public Round(long player_id, long score) {
+		this.player_id = player_id;
+		this.score = score;
+	}
+	
 	public Round(long id, long score, String date, long player_id) {
 		this.id = id;
 		this.score = score;

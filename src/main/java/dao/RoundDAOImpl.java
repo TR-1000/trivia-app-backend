@@ -79,7 +79,7 @@ public class RoundDAOImpl implements RoundDAO {
 	public List<Round> getRoundsByPlayerID(long id) {
 		
 		try(Connection conn = ConnectionUtil.getConnection()){
-			String sql = "SELECT * FROM round WHERE player_id = " + id + ";";
+			String sql = "SELECT * FROM round WHERE player_id = " + id + " ORDER BY id DESC;";
 
 			Statement statement = conn.createStatement();
 			

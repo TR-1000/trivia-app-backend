@@ -1,41 +1,60 @@
 package models;
 
+import java.sql.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Question {
-	long id;
-	String text;
-	List<Answer> answers = new ArrayList<>();
+	String question;
+	String[] incorrect;
+	String correct;
+	
+	public Question() {}
+	
+	public Question(String question, String[] incorrect, String correct) {
+		this.question = question;
+		this.incorrect = incorrect;
+		this.correct = correct;
 		
-	// Getter and Setters
-	public long getId() {
-		return id;
 	}
-	public void setId(long id) {
-		this.id = id;
-	}
-	public String getQuestion() {
-		return text;
-	}
-	public void setQuestion(String question) {
-		this.text = question;
-	}
-	public List<Answer> getAnswers() {
-		return answers;
-	}
-	public void setAnswers(List<Answer> answers) {
-		this.answers = answers;
-	}
-	//////////////////////////
-	
-	@Override
-	public String toString() {
-		return "Question [id=" + id + ", text=" + text
-				+ ", answers=" + answers + "]";
-	}
-	
-	
+
 	
 
+	public String getQuestion() {
+		return question;
+	}
+
+	public void setQuestion(String question) {
+		this.question = question;
+	}
+
+	public String[] getIncorrect() {
+		return incorrect;
+	}
+
+	public void setIncorrect(String[] array) {
+		this.incorrect = array;
+	}
+
+	public String getCorrect() {
+		return correct;
+	}
+
+	public void setCorrect(String correct) {
+		this.correct = correct;
+	}
+
+	@Override
+	public String toString() {
+		return "Question [question=" + question
+				+ ", incorrect=" + Arrays.toString(
+						incorrect) + ", correct=" + correct
+				+ "]";
+	}
+
+	
+		
+	
+	
 }
