@@ -8,4 +8,6 @@ public interface QuestionDAO {
 
 	List<Question> getAllQuestion();
 
+	public boolean addQuestion(Question question);
+
 }
