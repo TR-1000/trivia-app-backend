@@ -18,13 +18,16 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import controllers.LoginController;
+import dao.QuestionDAO;
+import dao.QuestionDAOImpl;
 import dao.RoundDAO;
 import dao.RoundDAOImpl;
 import dao.UserDAO;
 import dao.UserDAOImpl;
-
+import dto.ScoreDTO;
 import models.Admin;
 import models.Player;
+import models.Question;
 import models.Role;
 import models.Round;
 import models.User;
@@ -38,6 +41,7 @@ public class MasterServlet extends HttpServlet {
 	private static final LoginController loginController = new LoginController();
 	private static final UserDAO userDAO = new UserDAOImpl();
 	private static final RoundDAO roundDAO = new RoundDAOImpl();
+	private static final QuestionDAO questionDAO = new QuestionDAOImpl();
 	
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -451,6 +455,102 @@ public class MasterServlet extends HttpServlet {
 				}
 				
 				break;
+				
+			case "round":
+				
+				/* add a round of trivia */
+				
+				if (req.getMethod().equals("POST")) {
+					
+					if (session != null && ((Boolean) session.getAttribute("loggedin"))
+							&& session.getAttribute("role").equals(Role.PLAYER)) {
+						
+						String username = (String) session.getAttribute("username");
+						System.out.println(username);
+						
+						int id = (int) session.getAttribute("user_id");
+						System.out.println(id);
+						
+						BufferedReader reader = req.getReader();
+						
+						StringBuilder string = new StringBuilder();
+						
+						String line = reader.readLine();
+						
+						while (line != null) {
+							string.append(line);
+							line = reader.readLine();
+						}
+						
+						String body = new String(string);
+						
+						ScoreDTO scoreDTO = om.readValue(body, ScoreDTO.class);
+						
+						long score = scoreDTO.getScore();
+					
+						try {
+
+							Round round = new Round(id,score);
+							
+							if (roundDAO.newRound(round)) {
+								
+								res.setStatus(201);
+								res.getWriter().println(
+										"Thanks for playing, " + username + "\n" +
+										"ID: " + id + "\n" +
+										"Score: " + score
+									);
+								String json = om.writeValueAsString(roundDAO.getRoundsByPlayerID(id));
+								res.getWriter().println(json);
+
+							} else {
+
+								res.getWriter().println("Mistakes Were Made");
+								res.setStatus(400);
+
+							}
+
+						} catch (Exception e) {
+
+							res.getWriter().println("Mistakes Were Made");
+							res.getWriter().println(e);
+							e.printStackTrace();
+
+						}
+						
+					} else {
+						res.getWriter().println("Please Log in to play");
+						res.setStatus(401);
+					}
+						
+				} else {
+					res.getWriter().println("Wrong method. Try POST");
+				}
+					
+				break;
+				
+			case "questions":
+				
+				try {
+					
+					List<Question> q = questionDAO.getAllQuestion();
+					
+					
+					
+					String json = om.writeValueAsString(q);
+
+					res.getWriter().println(om.writeValueAsString(json));
+					
+				} catch (Exception e) {
+					res.getWriter().println(e);
+					System.out.println(e);
+				}
+				
+				
+				
+				break;
+				
+				
 				
 
 			default:
