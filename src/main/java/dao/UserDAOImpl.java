@@ -63,9 +63,41 @@ public class UserDAOImpl implements UserDAO {
 	
 	
 	// ========================================================
-	// ///////////////// FIND PLAYER BY NAME /////////////////
+	// ///////////////// FIND PLAYER BY ID /////////////////
 	// ========================================================
 	
+	@Override
+	public Player findPlayerById(Long id) {
+		
+		try(Connection conn = ConnectionUtil.getConnection()){
+			String sql = "SELECT * FROM player WHERE id = '" + id + "' ;";
+
+			Statement statement = conn.createStatement();
+
+			ResultSet result = statement.executeQuery(sql);
+
+			if (result.next()) {
+				Player player = new Player();
+				player.setId(result.getLong("id"));
+				player.setUsername(result.getString("username"));
+				player.setPassword(result.getString("password"));	
+				player.setRounds_played(roundDAO.getRoundsByPlayerID(result.getInt("id")));
+
+				return player;
+			}
+
+		}catch(SQLException e) {
+			System.out.println(e);
+		}
+		return null;
+	}
+	
+	
+	
+	// ========================================================
+	// ///////////////// FIND PLAYER BY NAME /////////////////
+	// ========================================================
+		
 	@Override
 	public Player findPlayerByName(String username) {
 		
@@ -149,6 +181,33 @@ public class UserDAOImpl implements UserDAO {
 			statement.setString(++index, player.getUsername());
 
 			statement.execute();
+			return true;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	
+	// ========================================================
+	// ///////////////// DELETE PLAYER ///////////////////////
+	// ========================================================
+
+	@Override
+	public boolean deletePlayer(Long id) {
+		try(Connection conn = ConnectionUtil.getConnection()){
+
+			String sql = "DELETE from player WHERE id = ?;";
+
+			PreparedStatement statement = conn.prepareStatement(sql);
+			System.out.println(statement);
+			int index = 0;
+
+			statement.setLong(++index, id);
+			statement.execute();
+			
+			System.out.println("deleting player");
 			return true;
 
 		} catch (SQLException e) {
@@ -248,12 +307,6 @@ public class UserDAOImpl implements UserDAO {
 			}
 			return false;
 		}
-	
-
-
-	
-	
-	
 	
 
 }

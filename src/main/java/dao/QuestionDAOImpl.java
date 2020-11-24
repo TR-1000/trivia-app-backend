@@ -16,8 +16,11 @@ public class QuestionDAOImpl implements QuestionDAO {
 	@Override
 	public boolean addQuestion(Question question) {
 		System.out.println("Adding question to database");
+		
 		try(Connection conn = ConnectionUtil.getConnection()){
+			
 			int index=0;
+			
 			String sql = "INSERT INTO question(question) " + "VALUES(?)";
 
 			PreparedStatement statement = conn.prepareStatement(sql);

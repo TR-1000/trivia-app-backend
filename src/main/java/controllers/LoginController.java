@@ -54,7 +54,7 @@ public class LoginController {
 				if (foundUser != null) {
 					
 					Role role = foundUser.getRole();
-					int user_id = (int) foundUser.getId();
+					Long user_id = (Long) foundUser.getId();
 					String username = foundUser.getUsername();
 
 					HttpSession session = req.getSession();
@@ -117,13 +117,13 @@ public class LoginController {
 				if (foundUser != null) {
 					
 					Role role = foundUser.getRole();
-					int user_id = (int) foundUser.getId();
+					Long user_id = (Long) foundUser.getId();
 					String username = foundUser.getUsername();
 
 					HttpSession session = req.getSession();
 					session.setAttribute("username", username);
 					session.setAttribute("role", role);
-					session.setAttribute("id", user_id);
+					session.setAttribute("user_id", user_id);
 					session.setAttribute("loggedin", true);
 					res.setStatus(200);
 					String json = om.writeValueAsString(foundUser);
