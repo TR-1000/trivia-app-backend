@@ -1,9 +1,25 @@
---create table role (
---	id Serial PRIMARY KEY,
---	role_type VARCHAR(64)
+
+--create table admin (
+--	id SERIAL primary key,
+--	username VARCHAR(255) unique NOT null,
+--	password VARCHAR(255) not null
+--
 --);
 --
 --
+--create table player (
+--	id SERIAL primary key,
+--	username VARCHAR(255) unique NOT null,
+--	password VARCHAR(255) not null,
+--);
+
+
+-- create table round (
+-- 	id SERIAL primary key,
+-- 	score INT not null,
+-- 	player_id REFERENCES player(id) ON DELETE CASCADE
+-- );
+
 --create table question (
 --	id Serial ,
 --	text varchar not null,
@@ -17,27 +33,3 @@
 --	correct boolean,
 --	question_id int REFERENCES question(id) ON DELETE CASCADE
 --);
---
---
---create table admin (
---	id SERIAL primary key,
---	username VARCHAR(255) unique NOT null,
---	password VARCHAR(255) not null
---
---);
---
---
---create table player (
---	id SERIAL primary key,
---	username VARCHAR(255) unique NOT null,
---	password VARCHAR(255) not null,
---	score INT DEFAULT(0),
---	rounds_played INT default (0)
---);
-
-
--- create table round (
--- 	id SERIAL primary key,
--- 	score INT not null,
--- 	player_id REFERENCES player(id) ON DELETE CASCADE
--- );
