@@ -23,7 +23,7 @@
 --	id SERIAL primary key,
 --	username VARCHAR(255) unique NOT null,
 --	password VARCHAR(255) not null
---	
+--
 --);
 --
 --
@@ -36,9 +36,8 @@
 --);
 
 
-create table round (
-	id SERIAL primary key,
-	score INT not null,
-	player_id REFERENCES player(id) ON DELETE CASCADE
-);
-
+-- create table round (
+-- 	id SERIAL primary key,
+-- 	score INT not null,
+-- 	player_id REFERENCES player(id) ON DELETE CASCADE
+-- );

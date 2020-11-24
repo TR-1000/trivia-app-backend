@@ -170,7 +170,7 @@ public class UserDAOImpl implements UserDAO {
 	public boolean updatePlayer(Player player) {
 		try(Connection conn = ConnectionUtil.getConnection()){
 
-			String sql = "UPDATE player SET  username=?, password=? WHERE username = ?;";
+			String sql = "UPDATE player SET  username=?, password=? WHERE id = ?;";
 
 			PreparedStatement statement = conn.prepareStatement(sql);
 			System.out.println(statement);
@@ -178,7 +178,7 @@ public class UserDAOImpl implements UserDAO {
 
 			statement.setString(++index, player.getUsername());
 			statement.setString(++index, player.getPassword());
-			statement.setString(++index, player.getUsername());
+			statement.setLong(++index, player.getId());
 
 			statement.execute();
 			return true;

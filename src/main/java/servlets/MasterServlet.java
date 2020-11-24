@@ -1,16 +1,12 @@
 package servlets;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sun.xml.internal.bind.v2.TODO;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
-import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -228,70 +224,75 @@ public class MasterServlet extends HttpServlet {
 				
 				try {
 					
-					String username = uri_portions[1];
+					Long id = Long.parseLong(uri_portions[1]);
 					
 					if (session != null && ((Boolean) session.getAttribute("loggedin"))
 							&& (
-							session.getAttribute("username").equals(username)
+							session.getAttribute("user_id").equals(id)
 							|| 
 							session.getAttribute("role").equals(Role.ADMIN)
 							)
 						) 
 					{
 						
-						Player foundUser = userDAO.findPlayerByName(username);
+						Player foundUser = userDAO.findPlayerById(id);
+						
+						if (foundUser != null) {
+							
+							BufferedReader reader = req.getReader();
 
-						BufferedReader reader = req.getReader();
+							StringBuilder string = new StringBuilder();
 
-						StringBuilder string = new StringBuilder();
+							String line = reader.readLine();
 
-						String line = reader.readLine();
+							while (line != null) {
+								string.append(line);
+								line = reader.readLine();
+							}
 
-						while (line != null) {
-							string.append(line);
-							line = reader.readLine();
+							String body = new String(string);
+
+							System.out.println(body);
+
+							User user = om.readValue(body, Player.class);
+
+							System.out.println(user);
+
+							if(user != null) {
+								
+								foundUser.setUsername(user.getUsername());
+								
+								foundUser.setPassword(user.getPassword());
+								
+								System.out.println("before " + foundUser);
+
+								userDAO.updatePlayer(foundUser);
+
+								System.out.println("after " + foundUser);
+
+								foundUser = userDAO.findPlayerById(id);
+
+
+							}
+							res.setStatus(200);
+							res.getWriter().println("Update Successful!");
+							String json = om.writeValueAsString(foundUser);
+							res.getWriter().println(json);
+							
+						} else {
+							res.setStatus(404);
+							res.getWriter().println("Player doesn't exist");
 						}
-
-						String body = new String(string);
-
-						System.out.println(body);
-
-						User user = om.readValue(body, Player.class);
-
-						System.out.println(user);
-
-						if(user != null) {
-							foundUser.setUsername(user.getUsername());
-							foundUser.setPassword(user.getPassword());
-							//foundUser.setId(id);
-
-							System.out.println("before " + foundUser);
-
-							userDAO.updatePlayer(foundUser);
-
-							System.out.println("after " + foundUser);
-
-							foundUser = userDAO.findPlayerByName(username);
-
-
-						}
-						res.setStatus(200);
-						res.getWriter().println("Update Successful!");
-						String json = om.writeValueAsString(foundUser);
-						res.getWriter().println(json);
-
+						
 					} else {
-
 						res.setStatus(401);
 						res.getWriter().println("Access Denied!");
-
 					}
 					
 				} catch (Exception e) {
 					res.setStatus(401);
 					res.getWriter().println("Mistakes Were Made");
 					res.getWriter().println(e);
-					
 				}
 				
 				break;
