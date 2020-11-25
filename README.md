@@ -62,6 +62,8 @@ public static Connection getConnection() throws SQLException {
 
 * Parse questions from the [triva_data.json](https://github.com/TR-1000/trivia-api/blob/master/trivia_data.json) file and add them to the database programmatically.
 
+* Password hashing
+
 * More logging
 
 ### Challenges
