@@ -23,7 +23,7 @@ To run the project you will need:
 
 To install the project to you to local machine:
 * [Download](https://github.com/TR-1000/trivia-api/archive/master.zip) project source code and unzip it into a folder location.
-* [Import Maven Project Into Eclipse](https://github.com/TR-1000/trivia-api/blob/master/Import_Maven_Project_Into_Eclipse-Javapapers.pdf)
+* [Import source code as a Maven project into Eclipse](https://github.com/TR-1000/trivia-api/blob/master/Import_Maven_Project_Into_Eclipse-Javapapers.pdf)
 
 * In the [src/main/java/utilities/ConnectionUtil.java](https://github.com/TR-1000/trivia-api/blob/master/src/main/java/utilities/ConnectionUtil.java) file
 change `String username` and `String password` to your credentials:
@@ -63,4 +63,4 @@ public static Connection getConnection() throws SQLException {
 
 ### Roadmap
 
-* Parse questions from the [triva_data.json](https://github.com/TR-1000/trivia-api/blob/master/trivia_data.json) file and add the to the database programmatically.
+* Parse questions from the [triva_data.json](https://github.com/TR-1000/trivia-api/blob/master/trivia_data.json) file and add them to the database programmatically.
