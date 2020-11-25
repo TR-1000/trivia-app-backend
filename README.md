@@ -67,6 +67,6 @@ public static Connection getConnection() throws SQLException {
 * More logging
 
 ### Challenges
-* Encountered some issues with Java code not saving when editing in Atom.
+* Encountered some [issues](https://discuss.atom.io/t/atom-is-not-saving-files/72580/4) with Java code not saving after editing in Atom.
 
 * Currently there is code for adding questions and answers to the database and access them from the API, but that code isn't working properly yet.
