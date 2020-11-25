@@ -1,6 +1,6 @@
 # Trivia-API
 This API is for managing players, administrators, and rounds of trivia.
-to get an idea of how the trivia game is to be played see this sample console app.
+to get an idea of how the trivia game is to be played see this sample console app. More info about the game can be found [here](https://github.com/TR-1000/trivia_game).
 
 Documentation for making requests to the API can be found [here](https://documenter.getpostman.com/view/8437872/TVmFifEd).
 
@@ -57,3 +57,11 @@ public static Connection getConnection() throws SQLException {
 * [Start the Tomcat server in Eclipse](https://github.com/TR-1000/trivia-api/blob/master/Tomcat_Configuration_In_Eclipse-Baeldung.pdf)
 
 * Make request in Postman
+
+### Known Issues
+
+* Currently there is code for adding questions and answers to the database and access them from the API but that code isn't working yet.
+
+### Roadmap
+
+* Parse questions from the [triva_data.json](https://github.com/TR-1000/trivia-api/blob/master/trivia_data.json) file and add the to the database programmatically.
