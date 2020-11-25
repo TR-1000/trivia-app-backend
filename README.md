@@ -21,7 +21,7 @@ To run the project you will need:
 * PostgreSQL Database
 * Postman API Testing Tool
 
-To install the project to you to local machine you will need:
+To install the project to you to local machine:
 * [Download](https://github.com/TR-1000/trivia-api/archive/master.zip) project source code and unzip it into a folder location.
 * [Import Maven Project Into Eclipse](https://github.com/TR-1000/trivia-api/blob/master/Import_Maven_Project_Into_Eclipse-Javapapers.pdf)
 
