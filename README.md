@@ -1,6 +1,5 @@
 # Trivia-API
-This API is for managing players, administrators, and rounds of trivia.
-to get an idea of how the trivia game is to be played see this sample console app. More info about the game can be found [here](https://github.com/TR-1000/trivia_game).
+This API is for managing players, administrators, and rounds of trivia. This API could be used to build a front end for a web application version of [this](https://github.com/TR-1000/trivia_game) simple console game.
 
 Documentation for making requests to the API can be found [here](https://documenter.getpostman.com/view/8437872/TVmFifEd).
 
