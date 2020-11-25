@@ -57,10 +57,14 @@ public static Connection getConnection() throws SQLException {
 
 * Make request in Postman
 
-### Known Issues
-
-* Currently there is code for adding questions and answers to the database and access them from the API but that code isn't working yet.
 
 ### Roadmap
 
 * Parse questions from the [triva_data.json](https://github.com/TR-1000/trivia-api/blob/master/trivia_data.json) file and add them to the database programmatically.
+
+* More logging
+
+### Challenges
+* Encountered some issues with Java code not saving when editing in Atom.
+
+* Currently there is code for adding questions and answers to the database and access them from the API, but that code isn't working properly yet.
