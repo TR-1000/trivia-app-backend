@@ -14,8 +14,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 
-/*
- * This class is used to parse the JSON data in trivia_data.json to a List of Java objects.
+/**
+ * This class is used to parse the JSON data in trivia_data.json to a List of Java objects mapped to the Question model.
  */
 
 public class QuestionsJsonParser {
@@ -42,15 +42,16 @@ public class QuestionsJsonParser {
 		    // convert JSON string to Question object
 		    List<Question> questions = Arrays.asList(mapper.readValue(Paths.get("trivia_data.json").toFile(), Question[].class));
 
-		    // print questions
-		    for (Question q : questions) {
-		    	System.out.println("The question is: " + q.getQuestion());
-		    	for (String ans : q.getIncorrect()) {
-		    		System.out.println(ans);
-		    	}
-		    	System.out.println(q.getCorrect());
-		    }
+		    // print questions (For debugging)
+//		    for (Question q : questions) {
+//		    	System.out.println("The question is: " + q.getQuestion());
+//		    	for (String ans : q.getIncorrect()) {
+//		    		System.out.println(ans);
+//		    	}
+//		    	System.out.println(q.getCorrect());
+//		    }
 		    
+		    // return list
 		    return questions;
 		    
 		} catch (Exception e) {
