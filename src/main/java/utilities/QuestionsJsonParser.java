@@ -41,15 +41,6 @@ public class QuestionsJsonParser {
 
 		    // convert JSON string to Question object
 		    List<Question> questions = Arrays.asList(mapper.readValue(Paths.get("trivia_data.json").toFile(), Question[].class));
-
-		    // print questions (For debugging)
-//		    for (Question q : questions) {
-//		    	System.out.println("The question is: " + q.getQuestion());
-//		    	for (String ans : q.getIncorrect()) {
-//		    		System.out.println(ans);
-//		    	}
-//		    	System.out.println(q.getCorrect());
-//		    }
 		    
 		    // return list
 		    return questions;

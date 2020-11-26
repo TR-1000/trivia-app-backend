@@ -22,7 +22,7 @@ create table round (
 );
 
 create table question (
-	id int PRIMARY key not null,
+	id int PRIMARY key UNIQUE not null,
 	text varchar not null
 );
 

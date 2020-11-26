@@ -1,14 +1,14 @@
 package models;
 
-import java.sql.Array;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+
 
 public class Question {
-	String question;
-	String[] incorrect;
-	String correct;
+	
+	private long id;
+	private String question;
+	private String[] incorrect;
+	private String correct;
 	
 	public Question() {}
 	
@@ -45,13 +45,23 @@ public class Question {
 		this.correct = correct;
 	}
 
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
 	@Override
 	public String toString() {
-		return "Question [question=" + question
-				+ ", incorrect=" + Arrays.toString(
-						incorrect) + ", correct=" + correct
-				+ "]";
+		return "Question [id=" + id + ", question="
+				+ question + ", incorrect=" + Arrays
+						.toString(incorrect) + ", correct="
+				+ correct + "]";
 	}
+
+	
 
 	
 		
