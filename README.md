@@ -14,12 +14,12 @@ Logged in players can create/play a round of trivia.
 ## Using the API
 
 To run the project you will need:
-* Java SE Development Kit 8
-* Eclipse IDE
-* Apache Maven
-* Tomcat v8.5 Server
-* PostgreSQL Database
-* Postman API Testing Tool
+* [Java SE Development Kit 8](https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html)
+* [Eclipse](https://www.eclipse.org/downloads/packages/release/2020-09/r/eclipse-ide-java-developers) or code editor of your choice
+* [Apache Maven](https://maven.apache.org/)
+* [Tomcat v8.5 Server](https://tomcat.apache.org/download-80.cgi)
+* [PostgreSQL](https://www.postgresql.org/) or your preferred RDBMS
+* [Postman API Testing Tool](https://www.postman.com/)
 
 To install the project to you to local machine:
 * [Download](https://github.com/TR-1000/trivia-api/archive/master.zip) project source code and unzip it into a folder location.
@@ -40,8 +40,8 @@ public static Connection getConnection() throws SQLException {
 		}
 
 		String url = "jdbc:postgresql://localhost:5432/trivia";
-		String username = "YOUR POSTGRESQL USERNAME";
-		String password = "YOUR PASSWORD";
+		String username = {{yourPostgresUsername}};
+		String password = {{yourPassword}};
 
 		return DriverManager.getConnection(url, username, password);
 
@@ -49,9 +49,7 @@ public static Connection getConnection() throws SQLException {
 
 }
 ```
-* Run the SQL scripts in PG admin or DBeaver to create database and tables
-
-* Add test data
+* Run the scripts in the SQL directory to create database and tables. Seed database with the provided scripts. The Questions data can be added using the scripts or by running the main method from [src/main/java/utilities/QuestionsBootstrapper.java](https://github.com/TR-1000/trivia-api/blob/master/src/main/java/utilities/QuestionsBootstrapper.java)
 
 * [Start the Tomcat server in Eclipse](https://github.com/TR-1000/trivia-api/blob/master/Tomcat_Configuration_In_Eclipse-Baeldung.pdf)
 
@@ -60,13 +58,14 @@ public static Connection getConnection() throws SQLException {
 
 ### Roadmap
 
-* Parse questions from the [triva_data.json](https://github.com/TR-1000/trivia-api/blob/master/trivia_data.json) file and add them to the database programmatically.
+- [x] ~~Parse questions from the [triva_data.json](https://github.com/TR-1000/trivia-api/blob/master/trivia_data.json) file and add them to the database programmatically.~~
 
-* Password hashing
+- [ ] Password hashing
 
-* More logging
+- [ ] More logging
 
 ### Challenges
 * Encountered some [issues](https://discuss.atom.io/t/atom-is-not-saving-files/72580/4) with Java code not saving after editing in Atom.
 
-* Currently there is code for adding questions and answers to the database and access them from the API, but that code isn't working properly yet.
+* ~~Currently there is code for adding questions and answers to the database and access them from the API, but that code isn't working properly yet.~~
+It's working now.
