@@ -5,10 +5,10 @@ Documentation for making requests to the API can be found [here](https://documen
 
 
 * Players can register and login.
-* Players can view and update their detailed information (username, password, and rounds played)
-Logged in players can create/play a round of trivia.
-* Only a current admin can create another admin account but, Admin cannot a player account.
-* Admins can both view all player information, as well as update it.
+* Players can view and update their detailed information (username, password, and rounds played) and delete their account.
+* Logged in players can create/play a round of trivia.
+* Only a current admin can create another admin account but, Admin cannot create a player account.
+* Admins can both view all player information, as well as update and delete a players account.
 * Anyone can view rounds played by an individual player or all players.
 
 ## Running the API
