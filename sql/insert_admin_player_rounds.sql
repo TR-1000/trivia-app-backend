@@ -1,3 +1,4 @@
+
 INSERT INTO public."admin" (username,"password") VALUES
 ('admin','password')
 ;
