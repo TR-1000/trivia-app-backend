@@ -49,11 +49,18 @@ public static Connection getConnection() throws SQLException {
 
 }
 ```
-* Run the scripts in the SQL directory to create database and tables. Seed database with the provided scripts. The Questions data can be added using the scripts or by running the main method from [src/main/java/utilities/QuestionsBootstrapper.java](https://github.com/TR-1000/trivia-api/blob/master/src/main/java/utilities/QuestionsBootstrapper.java)
+* Create a database named "trivia"
+```sql
+CREATE DATABASE trivia;
+```
+* Run the scripts in the SQL directory to create the tables. Seed the database with the provided scripts. The questions and answers data can be added using the scripts or by running the main method in [src/main/java/utilities/QuestionsBootstrapper.java](https://github.com/TR-1000/trivia-api/blob/master/src/main/java/utilities/QuestionsBootstrapper.java)  
+
+  *Entity Relationship Diagram*  
+  ![ERD](https://github.com/TR-1000/trivia-api/blob/master/sql/trivia_erd.png?raw=true)
 
 * [Start the Tomcat server in Eclipse](https://github.com/TR-1000/trivia-api/blob/master/Tomcat_Configuration_In_Eclipse-Baeldung.pdf)
 
-* Make request in Postman
+* [Make requests in Postman](https://documenter.getpostman.com/view/8437872/TVmFifEd)
 
 
 ### Roadmap
