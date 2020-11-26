@@ -11,7 +11,7 @@ Logged in players can create/play a round of trivia.
 * Admins can both view all player information, as well as update it.
 * Anyone can view rounds played by an individual player or all players.
 
-## Using the API
+## Running the API
 
 To run the project you will need:
 * [Java SE Development Kit 8](https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html)
