@@ -6,11 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
+import dto.PlayerDTO;
 import models.Admin;
 import models.Player;
 import models.Role;
@@ -49,7 +47,6 @@ public class UserDAOImpl implements UserDAO {
 			statement.execute();
 			return true;
 
-
 		} catch (SQLException e) {
 			System.out.println(e);
 		}
@@ -66,7 +63,7 @@ public class UserDAOImpl implements UserDAO {
 	// ========================================================
 	
 	@Override
-	public Player findPlayerById(Long id) {
+	public PlayerDTO findPlayerById(Long id) {
 		
 		try(Connection conn = ConnectionUtil.getConnection()){
 			String sql = "SELECT * FROM player WHERE id = '" + id + "' ;";
@@ -76,16 +73,15 @@ public class UserDAOImpl implements UserDAO {
 			ResultSet result = statement.executeQuery(sql);
 
 			if (result.next()) {
-				Player player = new Player();
+				PlayerDTO player = new PlayerDTO();
 				player.setId(result.getLong("id"));
-				player.setUsername(result.getString("username"));
-				player.setPassword(result.getString("password"));	
+				player.setUsername(result.getString("username"));	
 				player.setRounds_played(roundDAO.getRoundsByPlayerID(result.getInt("id")));
 
 				return player;
 			}
 
-		}catch(SQLException e) {
+		} catch(SQLException e) {
 			System.out.println(e);
 		}
 		return null;
@@ -98,30 +94,34 @@ public class UserDAOImpl implements UserDAO {
 	// ========================================================
 		
 	@Override
-	public Player findPlayerByName(String username) {
+	public PlayerDTO findPlayerByName(String username) {
 		
 		try(Connection conn = ConnectionUtil.getConnection()){
-			String sql = "SELECT * FROM player WHERE username = '" + username + "' ;";
+			
+			String sql = "SELECT id, username FROM player WHERE username = '" + username + "' ;";
 
 			Statement statement = conn.createStatement();
 
 			ResultSet result = statement.executeQuery(sql);
 
 			if (result.next()) {
-				Player player = new Player();
+				PlayerDTO player = new PlayerDTO();
 				player.setId(result.getInt("id"));
 				player.setUsername(result.getString("username"));
-				player.setPassword(result.getString("password"));	
 				player.setRounds_played(roundDAO.getRoundsByPlayerID(result.getInt("id")));
 
 				return player;
 			}
 
-		}catch(SQLException e) {
+		} catch(SQLException e) {
 			System.out.println(e);
 		}
 		return null;
 	}
+	
+	
+	
+	
 	
 	
 	// =====================================================
@@ -129,36 +129,36 @@ public class UserDAOImpl implements UserDAO {
 	// =====================================================
 
 	@Override
-	public List<User> findAllPlayers() {
-		System.out.println("Finding all players");
+	public List<PlayerDTO> findAllPlayers() {
+		
 		try(Connection conn = ConnectionUtil.getConnection()){
-			String sql = "SELECT * FROM player ORDER BY id DESC;";
+			
+			String sql = "SELECT id, username FROM player ORDER BY id DESC;";
 
 			Statement statement = conn.createStatement();
 
-			List<User> userList = new ArrayList<>();
+			List<PlayerDTO> userList = new ArrayList<>();
 
 			ResultSet result = statement.executeQuery(sql);
 
 			while(result.next()) {
-				Player user = new Player();
+				PlayerDTO user = new PlayerDTO();
 
 				user.setId(result.getInt("id"));
 				user.setUsername(result.getString("username"));
-				user.setPassword(result.getString("password"));
 				user.setRounds_played(roundDAO.getRoundsByPlayerID(result.getInt("id")));
-				
 				userList.add(user);
 
 			}
 
 			return userList;
 
-		}catch(SQLException e) {
+		} catch(SQLException e) {
 			System.out.println(e);
 		}
 		return null;
 	}
+			
 	
 	
 	// ========================================================
@@ -167,6 +167,7 @@ public class UserDAOImpl implements UserDAO {
 
 	@Override
 	public boolean updatePlayer(Player player) {
+		
 		try(Connection conn = ConnectionUtil.getConnection()){
 
 			String sql = "UPDATE player SET  username=?, password=? WHERE id = ?;";
@@ -189,6 +190,107 @@ public class UserDAOImpl implements UserDAO {
 	}
 	
 	
+	
+	// ===========================================================
+	// ///////////////// ADMIN FIND ALL PLAYERS /////////////////
+	// ===========================================================
+
+		@Override
+		public List<User> adminFindAllPlayers() {
+			System.out.println("Finding all players");
+			try(Connection conn = ConnectionUtil.getConnection()){
+				String sql = "SELECT * FROM player ORDER BY id DESC;";
+
+				Statement statement = conn.createStatement();
+
+				List<User> userList = new ArrayList<>();
+
+				ResultSet result = statement.executeQuery(sql);
+
+				while(result.next()) {
+					Player user = new Player();
+
+					user.setId(result.getInt("id"));
+					user.setUsername(result.getString("username"));
+					user.setPassword(result.getString("password"));
+					user.setRounds_played(roundDAO.getRoundsByPlayerID(result.getInt("id")));
+					userList.add(user);
+
+				}
+
+				return userList;
+
+			}catch(SQLException e) {
+				System.out.println(e);
+			}
+			return null;
+		}
+		
+		
+		// ============================================================
+		// ///////////////// ADMIN FIND PLAYER BY ID /////////////////
+		// ============================================================
+		
+		@Override
+		public Player adminFindPlayerById(Long id) {
+			
+			try(Connection conn = ConnectionUtil.getConnection()){
+				String sql = "SELECT * FROM player WHERE id = '" + id + "' ;";
+
+				Statement statement = conn.createStatement();
+
+				ResultSet result = statement.executeQuery(sql);
+
+				if (result.next()) {
+					Player player = new Player();
+					player.setId(result.getLong("id"));
+					player.setUsername(result.getString("username"));
+					player.setPassword(result.getString("password"));	
+					player.setRounds_played(roundDAO.getRoundsByPlayerID(result.getInt("id")));
+
+					return player;
+				}
+
+			}catch(SQLException e) {
+				System.out.println(e);
+			}
+			return null;
+		}
+		
+		
+		
+		// =============================================================
+		// ///////////////// ADMIN FIND PLAYER BY NAME /////////////////
+		// =============================================================
+			
+		@Override
+		public Player adminFindPlayerByName(String username) {
+			
+			try(Connection conn = ConnectionUtil.getConnection()){
+				String sql = "SELECT * FROM player WHERE username = '" + username + "' ;";
+
+				Statement statement = conn.createStatement();
+
+				ResultSet result = statement.executeQuery(sql);
+
+				if (result.next()) {
+					Player player = new Player();
+					player.setId(result.getInt("id"));
+					player.setUsername(result.getString("username"));
+					player.setPassword(result.getString("password"));	
+					player.setRounds_played(roundDAO.getRoundsByPlayerID(result.getInt("id")));
+
+					return player;
+				}
+
+			} catch(SQLException e) {
+				System.out.println(e);
+			}
+			return null;
+		}
+		
+	
+	
 	// ========================================================
 	// ///////////////// DELETE PLAYER ///////////////////////
 	// ========================================================
@@ -200,13 +302,13 @@ public class UserDAOImpl implements UserDAO {
 			String sql = "DELETE from player WHERE id = ?;";
 
 			PreparedStatement statement = conn.prepareStatement(sql);
-			System.out.println(statement);
+			
 			int index = 0;
 
 			statement.setLong(++index, id);
+			
 			statement.execute();
 			
-			System.out.println("deleting player");
 			return true;
 
 		} catch (SQLException e) {
@@ -253,8 +355,9 @@ public class UserDAOImpl implements UserDAO {
 
 		@Override
 		public List<User> findAllAdmin() {
-			System.out.println("Finding all players");
+			
 			try(Connection conn = ConnectionUtil.getConnection()){
+				
 				String sql = "SELECT * FROM admin ORDER BY id DESC;";
 
 				Statement statement = conn.createStatement();
@@ -274,7 +377,7 @@ public class UserDAOImpl implements UserDAO {
 
 				return userList;
 
-			}catch(SQLException e) {
+			} catch(SQLException e) {
 				System.out.println(e);
 			}
 			return null;
@@ -299,6 +402,7 @@ public class UserDAOImpl implements UserDAO {
 				statement.setString(++index, admin.getUsername());
 
 				statement.execute();
+				
 				return true;
 
 			} catch (SQLException e) {

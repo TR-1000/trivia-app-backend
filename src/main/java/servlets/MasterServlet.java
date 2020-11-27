@@ -20,6 +20,7 @@ import dao.RoundDAO;
 import dao.RoundDAOImpl;
 import dao.UserDAO;
 import dao.UserDAOImpl;
+import dto.PlayerDTO;
 import dto.ScoreDTO;
 import models.Admin;
 import models.Player;
@@ -108,7 +109,7 @@ public class MasterServlet extends HttpServlet {
 			// ///////////////// PLAYERS /////////////////
 			// ============================================
 
-			case "player":
+			case "players":
 
 				/* create new player account */
 
@@ -130,7 +131,7 @@ public class MasterServlet extends HttpServlet {
 					Player player = om.readValue(body, Player.class);
 
 					System.out.println(userDAO.findPlayerByName(player.getUsername()) != null);
-					System.out.println("SANITY CHECK");
+					
 					try {
 
 						if (userDAO.findPlayerByName(player.getUsername()) != null) {
@@ -160,51 +161,74 @@ public class MasterServlet extends HttpServlet {
 
 					if (uri_portions.length == 2) {
 
-						Long id = Long.parseLong(uri_portions[1]);
-
-						if (session != null && ((Boolean) session.getAttribute("loggedin"))
-								&& (
-								session.getAttribute("user_id").equals(id)
-								||
-								session.getAttribute("role").equals(Role.ADMIN)
+						long id = Long.parseLong(uri_portions[1]);
+						
+						if (session != null) {
+							
+							if (((Boolean) session.getAttribute("loggedin"))
+									&& (
+									session.getAttribute("user_id").equals(id)
+									||
+									session.getAttribute("role").equals(Role.ADMIN)
+									)
 								)
-							)
-						{
-							Player player = userDAO.findPlayerById(id);
+							{
+								
+								Player player = userDAO.adminFindPlayerById(id);
 
-							if (player != null) {
-								res.setStatus(200);
-								String json = om.writeValueAsString(player);
-								res.getWriter().println(json);
+								if (player != null) {
+									res.setStatus(200);
+									String json = om.writeValueAsString(player);
+									res.getWriter().println(json);
+
+								} else {
+									res.setStatus(404);
+									res.getWriter().println("Player " + id + " doesn't exist");
+
+								}
+
+
 
 							} else {
-								res.setStatus(404);
-								res.getWriter().println("Player " + id + " doesn't exist");
+								
+								PlayerDTO player = userDAO.findPlayerById(id);
 
+								if (player != null) {
+									res.setStatus(200);
+									String json = om.writeValueAsString(player);
+									res.getWriter().println(json);
+
+								} else {
+									res.setStatus(404);
+									res.getWriter().println("Player " + id + " doesn't exist");
+
+								}
 							}
-
-
-
 						} else {
 							res.setStatus(401);
-							res.getWriter().println("Access Denied!");
+							res.getWriter().println(om.writeValueAsString("Access Denied!"));
 						}
+
+					
 
 					} else {
 
-						/* find all players (Admin only) */
+						/* find all players */
 
 						if ( session != null ) {
 							if (session.getAttribute("role").equals(Role.ADMIN)) {
-								List<User> all = userDAO.findAllPlayers();
+								List<User> all = userDAO.adminFindAllPlayers();
 								res.setStatus(200);
-								res.getWriter().println(om.writeValueAsString(all));
+								String json = om.writeValueAsString(all);
+								res.getWriter().println(json);
 
 							} else {
-								res.setStatus(401);
-								res.getWriter().println(om.writeValueAsString("Access Denied!"));
+								List<PlayerDTO> all = userDAO.findAllPlayers();
+								res.setStatus(200);
+								String json = om.writeValueAsString(all);
+								res.getWriter().println(json);
 							}
-
+							
 						} else {
 							res.setStatus(401);
 							res.getWriter().println(om.writeValueAsString("Access Denied!"));
@@ -235,7 +259,7 @@ public class MasterServlet extends HttpServlet {
 						)
 					{
 
-						Player foundUser = userDAO.findPlayerById(id);
+						Player foundUser = userDAO.adminFindPlayerById(id);
 
 						if (foundUser != null) {
 
@@ -270,7 +294,7 @@ public class MasterServlet extends HttpServlet {
 
 								System.out.println("after " + foundUser);
 
-								foundUser = userDAO.findPlayerById(id);
+								foundUser = userDAO.adminFindPlayerById(id);
 
 
 							}
@@ -350,6 +374,12 @@ public class MasterServlet extends HttpServlet {
 
 				}
 
+				break;
+				
+			case "all_players":
+				List<PlayerDTO> all = userDAO.findAllPlayers();
+				res.setStatus(200);
+				res.getWriter().println(om.writeValueAsString(all));
 				break;
 
 
@@ -502,7 +532,7 @@ public class MasterServlet extends HttpServlet {
 					if (uri_portions.length == 2) {
 
 						String username = uri_portions[1];
-						Player foundUser = userDAO.findPlayerByName(username);
+						PlayerDTO foundUser = userDAO.findPlayerByName(username);
 						long id = foundUser.getId();
 
 						try {
@@ -623,9 +653,8 @@ public class MasterServlet extends HttpServlet {
 
 			case "questions":
 				
-				if (session != null && ((Boolean) session.getAttribute("loggedin"))
-				&& (session.getAttribute("role").equals(Role.ADMIN)))
-				{
+				if (session != null && ((Boolean) session.getAttribute("loggedin"))) {
+					
 					try {
 
 						List<Question> q = questionDAO.getAllQuestion(); 
@@ -643,7 +672,7 @@ public class MasterServlet extends HttpServlet {
 
 				} else {
 					res.setStatus(401);
-					res.getWriter().println("Admin Only");
+					res.getWriter().println("Access Denied");
 				}
 
 				
