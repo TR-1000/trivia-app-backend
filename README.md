@@ -1,15 +1,19 @@
 # Trivia-API
-This API is for managing players, administrators, and rounds of trivia. This API could be used to build a front end for a web application version of [this](https://github.com/TR-1000/trivia_game) simple console game.
+This API is for managing users and trivia questions. This API could be used to build a front end for a web application version of [this](https://github.com/TR-1000/trivia_game) simple console trivia game.
+
+* Players can register and login.
+* Players can view and update their information and also delete their account.
+* Logged in players can create/play a round of trivia.
+* Only a current admin can create another admin account, but admin cannot create a player account.
+* Admins can both view all player information, as well as update and delete a players account.
+* Administrators can view all questions and their potential answers.
+* Anyone can view rounds played by an individual player or all players.
 
 Documentation for making requests to the API can be found [here](https://documenter.getpostman.com/view/8437872/TVmFifEd).
 
+*Entity Relationship Diagram*  
+![ERD](https://github.com/TR-1000/trivia-api/blob/master/sql/trivia_erd.png?raw=true)
 
-* Players can register and login.
-* Players can view and update their detailed information (username, password, and rounds played) and delete their account.
-* Logged in players can create/play a round of trivia.
-* Only a current admin can create another admin account but, Admin cannot create a player account.
-* Admins can both view all player information, as well as update and delete a players account.
-* Anyone can view rounds played by an individual player or all players.
 
 ## Running the API
 
@@ -55,8 +59,6 @@ CREATE DATABASE trivia;
 ```
 * Run the scripts in the SQL directory to create the tables. Seed the database with the provided scripts. The questions and answers data can be added using the scripts or by running the main method in [src/main/java/utilities/QuestionsBootstrapper.java](https://github.com/TR-1000/trivia-api/blob/master/src/main/java/utilities/QuestionsBootstrapper.java)  
 
-  *Entity Relationship Diagram*  
-  ![ERD](https://github.com/TR-1000/trivia-api/blob/master/sql/trivia_erd.png?raw=true)
 
 * [Start the Tomcat server in Eclipse](https://github.com/TR-1000/trivia-api/blob/master/Tomcat_Configuration_In_Eclipse-Baeldung.pdf)
 
