@@ -41,7 +41,6 @@ public class UserDAOImpl implements UserDAO {
 		
 		try(Connection conn = ConnectionUtil.getConnection()){
 			int index=0;
-			System.out.println(sql);
 			PreparedStatement statement = conn.prepareStatement(sql);
 			statement.setString(++index, user.getUsername());
 			statement.setString(++index, user.getPassword());
@@ -173,7 +172,7 @@ public class UserDAOImpl implements UserDAO {
 			String sql = "UPDATE player SET  username=?, password=? WHERE id = ?;";
 
 			PreparedStatement statement = conn.prepareStatement(sql);
-			System.out.println(statement);
+			
 			int index = 0;
 
 			statement.setString(++index, player.getUsername());
@@ -292,7 +291,7 @@ public class UserDAOImpl implements UserDAO {
 				String sql = "UPDATE admin SET  username=?, password=? WHERE username = ?;";
 
 				PreparedStatement statement = conn.prepareStatement(sql);
-				System.out.println(statement);
+				
 				int index = 0;
 
 				statement.setString(++index, admin.getUsername());
