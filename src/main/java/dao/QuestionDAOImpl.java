@@ -21,10 +21,8 @@ public class QuestionDAOImpl implements QuestionDAO {
 			String sql = "INSERT INTO question(text, id) " + "VALUES(?,?)";
 
 			PreparedStatement statement = conn.prepareStatement(sql);
-			
 			statement.setString(++index, question.getQuestion());
 			statement.setLong(++index, question.getId());
-	
 			statement.execute();
 			return true;
 
@@ -35,20 +33,33 @@ public class QuestionDAOImpl implements QuestionDAO {
 		}
         
         
-        @Override
+    @Override
 	public boolean addIncorrect(String incorrect_answer, Long id) {
 		System.out.println("Adding incorrect answer to database");
 		
 		try(Connection conn = ConnectionUtil.getConnection()){
 			
-			int index=0;
-			
-			String sql = "INSERT INTO incorrect_answer(text, question_id) " + "VALUES(?,?)";
+			String sql = "SELECT text FROM incorrect_answer WHERE id = ?;";
 
 			PreparedStatement statement = conn.prepareStatement(sql);
 			
-			statement.setString(++index, incorrect_answer);
+			int index=0;
+			
 			statement.setLong(++index, id);
+			
+			List<String> arrayList = new ArrayList<>();
+			
+			ResultSet result = statement.executeQuery(sql);
+			
+			if (result.next()) {
+				String inc;
+				inc = result.getString("text");
+				arrayList.add(inc);
+			}
+			
+			
+			
+			
 	
 			statement.execute();
 			return true;
@@ -59,7 +70,7 @@ public class QuestionDAOImpl implements QuestionDAO {
 			return false;
 		}
         
-        @Override
+    @Override
 	public boolean addCorrect(String correct_answer, Long id) {
 		System.out.println("Adding correct answer to database");
 		
@@ -83,34 +94,89 @@ public class QuestionDAOImpl implements QuestionDAO {
 			return false;
 		}
         
-        
+     
+    
 
 	@Override
 	public List<Question> getAllQuestion() {
 		
 		try(Connection conn = ConnectionUtil.getConnection()){
-			String sql = "SELECT * FROM question_json;";
+			
+			String sql = "SELECT * FROM question;";
 
-			Statement statement = conn.createStatement();
+			PreparedStatement statement = conn.prepareStatement(sql);
 
 			List<Question> questionList = new ArrayList<>();
 
-			ResultSet result = statement.executeQuery(sql);
+			ResultSet result = statement.executeQuery();
 
 			while(result.next()) {
 				Question q = new Question();
-
-				
-				q.setQuestion(result.getString("question"));
-				//q.setIncorrect(result.getArray("incorrect"));
-				q.setCorrect(result.getString("correct"));
-				
+				q.setId(result.getLong("id"));
+				q.setQuestion(result.getString("text"));
+				q.setIncorrect(getIncorrectAnswers(result.getLong("id")));
+				q.setCorrect(getCorrectAnswer(result.getLong("id")));
 				questionList.add(q);
-
 
 			}
 
 			return questionList;
+
+		}catch(SQLException e) {
+			System.out.println(e);
+		}
+		return null;
+	}
+	
+	
+	
+	@Override
+	public String[] getIncorrectAnswers(long question_id) {
+		
+		try(Connection conn = ConnectionUtil.getConnection()){
+			
+			String sql = "SELECT * FROM incorrect_answer WHERE question_id = '" + question_id + "';";
+
+			PreparedStatement statement = conn.prepareStatement(sql);
+			
+			ResultSet result = statement.executeQuery();
+			
+			List<String> arrayList = new ArrayList<>();
+
+			while(result.next()) {
+				arrayList.add(result.getString("text"));
+			}
+			
+			String[] incorrectAnswers =  new String[arrayList.size()];
+			
+			incorrectAnswers = arrayList.toArray(incorrectAnswers);
+			
+			return incorrectAnswers;
+
+		} catch(SQLException e) {
+			System.out.println(e);
+		}
+		return null;
+	}
+
+	
+	
+	@Override
+	public String getCorrectAnswer(long question_id) {
+		
+		try(Connection conn = ConnectionUtil.getConnection()){
+			
+			String sql = "SELECT * FROM correct_answer WHERE question_id ='" + question_id + "';";
+
+			PreparedStatement statement = conn.prepareStatement(sql);
+		
+			ResultSet result = statement.executeQuery();
+			if (result.next()) {
+				String correctAnswer = result.getString("text");
+				return correctAnswer;
+			}
+			
+			
 
 		}catch(SQLException e) {
 			System.out.println(e);
